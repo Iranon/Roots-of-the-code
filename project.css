@@ -1,0 +1,34 @@
+body{
+  background-color: #0b0b0b;
+}
+
+@font-face {
+    font-family: "TitleFont";
+    src: url("/fonts/Lexend_Exa/LexendExa-Regular.ttf");
+  }
+@font-face {
+    font-family: "LocationName";
+    src: url("/fonts/Nanum_Gothic/NanumGothic-Bold.ttf");
+  }
+
+.projectTitle {
+  color: white;
+  text-align: center;
+  font-family: "TitleFont";
+  margin-bottom: 400;
+}
+
+.script {
+  margin-top: 50;
+  display: flex;
+  /* This centers the sketch horizontally. */
+  justify-content: center;
+  /* This centers the sketch vertically. */
+  align-items: center;
+}
+
+.locationName {
+  color: white;
+  text-align: center;
+  font-family: "LocationName";
+}
