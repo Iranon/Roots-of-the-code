@@ -1,3 +1,4 @@
+var canv; //canvas variable
 var boy;  //the variable where the protagonist sprite will be saved into.
 var loc;  //the variable that will contain the location image.
 var sheet;  //the variable that will contain the sheet sprite.
@@ -7,9 +8,11 @@ var thoughtClick = true;  //variable to stop thought screen when player clicks a
 var readPaper = false;  //this variable becomes true when the character reads the message on the paper.
 var gotMessage = false; //this variable allows to draw exit screen only after the message has been read.
 var runProgram = false; //this variable becomes true when the character interacts with the computer.
+var front;  //this will contain the computer front image.
 var getOut = false, out = false; //this variables manage the exit screen.
 
 //Computer Vision Variables (computer program)
+var rW = 640, rH = 480; //resized Canvas
 var cap;  //video capture variable
 var cScale = 8;  //capture scale
 var graph;  //buffer variable to apply posterize filter
@@ -20,10 +23,12 @@ var disp; //variable for displacement based on the volume
 function preload() {
   loc = loadImage('imgs/location.png');
   sheet = loadImage('imgs/paperSheet.png');
+  front = loadImage('imgs/Computer-FRONT.png')
 }
 
 function setup() {
-  createCanvas(900, 342);
+  canv = createCanvas(900, 342);
+  canv.parent("script");  //put canvas inside 'script' div (html)
 
   boy = createSprite(24, 220);
   boy.addAnimation('stop', 'imgs/Idle-1.png', 'imgs/Idle-20.png');  //idle animation
@@ -110,7 +115,7 @@ function cursorIcon() {
 function mouseClicked() {
   if (mouseX <= width && mouseX >= 0 && mouseY <= height && mouseY >= 0){ //Clicking inside the canvas
     click = true;
-    p = mouseX;
+    p = int(mouseX);
   }
   //Manage paper sheet clicking
   let dPaper = dist(mouseX, mouseY, 354, 212); //paper sheet position
@@ -190,16 +195,16 @@ function interactPaper() {
 function cvSetup(){
   //ComputerVision setup
   cap = createCapture(VIDEO);
-  cap.size(width/cScale, height/cScale);  //creating a scaled video capture
+  cap.size(rW/cScale, rH/cScale);  //creating a scaled video capture with resized canvas
   cap.hide();
-  graph = createGraphics(640, 480);
+  graph = createGraphics(438, 406); //computer front space (inside monitor edges)
   mic = new p5.AudioIn();
   mic.start();
 }
 
 //Computer program function
 function captureDisplace() {
-  resizeCanvas(640, 480);
+  resizeCanvas(rW, rH); //resizing
   vol = mic.getLevel(); //getting the volume
   disp = map(vol, 0, 1, 0, 2);
   cap.loadPixels();
@@ -216,6 +221,7 @@ function captureDisplace() {
       graph.rect(x*cScale + random(disp) * 6, y*cScale + random(disp) * 4, cScale, cScale); //drawing rectangles into the graph buffer
     }
   }
-  image(graph, 0, 0, 640, 480);
+  image(graph, 0, 0, rW, rH); //drawing the buffer
   filter(POSTERIZE, 6);
+  image(front, 0, 0, 640, 480); //drawing the computer front
 }
