@@ -1,3 +1,7 @@
+/*
+  =|--> 2019 - Matteo Vinci <--|=
+*/
+
 var canv; //canvas variable
 var boy;  //the variable where the protagonist sprite will be saved into.
 var loc;  //the variable that will contain the location image.
